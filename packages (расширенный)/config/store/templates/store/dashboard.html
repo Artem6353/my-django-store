@@ -7,24 +7,24 @@
 <body>
 
     <div class="sidebar">
-        <h2>Добавление данных</h2>
+        <h2 id="catalog">Добавление данных</h2>
         <div class="form-card">
-            <h3>+ Категория</h3>
-            <form method="POST">{% csrf_token %}{{ cat_form.as_p }}
+            <h3 id="q5">+ Категория</h3>
+            <form method="POST" action="#q5">{% csrf_token %}{{ cat_form.as_p }}
                 <button type="submit" name="btn_category" class="btn btn-blue btn-add">Создать</button>
             </form>
         </div>
         <hr>
         <div class="form-card">
-            <h3>+ Товар</h3>
-            <form method="POST" enctype="multipart/form-data">{% csrf_token %}{{ prod_form.as_p }}
+            <h3 id="q6">+ Товар</h3>
+            <form method="POST" action="#q6" enctype="multipart/form-data">{% csrf_token %}{{ prod_form.as_p }}
                 <button type="submit" name="btn_product" class="btn btn-orange btn-add">Создать</button>
             </form>
         </div>
         <hr>
         <div class="form-card">
-            <h3>+ Заказ</h3>
-            <form method="POST" enctype="multipart/form-data">{% csrf_token %}{{ ord_form.as_p }}
+            <h3 id="q7">+ Заказ</h3>
+            <form method="POST" action="#q7" enctype="multipart/form-data">{% csrf_token %}{{ ord_form.as_p }}
                 <button type="submit" name="btn_order" class="btn btn-green btn-add">Оформить</button>
             </form>
         </div>
@@ -42,7 +42,7 @@
     <div class="category-section" style="margin-bottom: 40px;">
         <h3 style="background-color: #f8f9fa; padding: 10px; border-left: 5px solid #2c3e50;">
             Категория: {{ category.name }}
-            <small>(<a href="{% url 'delete_item' 'category' category.id %}" style="color: red; font-size: 12px;">Удалить категорию</a>)</small>
+            <small>(<a id="delete" href="{% url 'delete_item' 'category' category.id %}" style="color: red; font-size: 12px;">Удалить категорию</a>)</small>
         </h3>
 
         <table border="1" width="100%" style="margin-bottom: 10px; border-collapse: collapse;">
@@ -70,8 +70,8 @@
                     <td>{{ p.title }}</td>
                     <td>{{ p.price }} руб.</td>
                     <td><a href="{{ p.manual_url }}" target="_blank">Открыть</a></td>
-                    <td>
-                        <a href="{% url 'delete_item' 'product' p.id %}" onclick="return confirm('Удалить товар?')">Удалить</a>
+                    <td id="del1">
+                        <a  href="{% url 'delete_item' 'product' p.id %}#del1" onclick="return confirm('Удалить товар?')">Удалить</a>
                     </td>
                 </tr>
                 {% empty %}
@@ -93,8 +93,8 @@
                 <td>{{ o.product.title }}</td>
                 <td>{{ o.customer_email }}</td>
                 <td>{{ o.quantity }}</td>
-                <td>
-                    <a href="{% url 'delete_item' 'order' o.id %}">Удалить</a>
+                <td id="del2">
+                    <a href="{% url 'delete_item' 'order' o.id %}#del2">Удалить</a>
                 </td>
             </tr>
             {% endfor %}
@@ -105,10 +105,10 @@
         <h2 style="color: #e74c3c;">Аналитические отчёты</h2>
 
       <div class="reports-section">
-            <h2>Отчёты по запросам БД</h2>
+            <h2 id="reports">Отчёты по запросам БД</h2>
 
-            <h3>1. Список продукции (Текстовый фильтр)</h3>
-            <form method="GET" class="filter-form">
+            <h3 id="q1">1. Список продукции (Текстовый фильтр)</h3>
+            <form method="GET" action="#q1" class="filter-form">
                 <input type="text" name="search_q1" placeholder="Введите название..." value="{{ request.GET.search_q1 }}">
                 <button type="submit">Найти</button>
             </form>
@@ -121,8 +121,8 @@
                 {% endfor %}
             </table>
 
-            <h3>2. Заказы (Фильтр по дате)</h3>
-            <form method="GET" class="filter-form">
+            <h3 id="q2">2. Заказы (Фильтр по дате)</h3>
+            <form method="GET" action="#q2" class="filter-form">
                 <input type="date" name="date_q2" value="{{ request.GET.date_q2 }}">
                 <button type="submit">Фильтровать</button>
             </form>
@@ -135,8 +135,8 @@
                 {% endfor %}
             </table>
 
-            <h3>3. Поиск по Email</h3>
-            <form method="GET" class="filter-form">
+            <h3 id="q3">3. Поиск по Email</h3>
+            <form method="GET" action="#q3" class="filter-form">
                 <input type="email" name="email_q4" placeholder="example@mail.ru" value="{{ request.GET.email_q4 }}">
                 <button type="submit">Найти</button>
             </form>
@@ -154,8 +154,8 @@
                 <strong>Максимальная стоимость:</strong> {{ q3.max_price|default:"0" }} руб.
             </div>
 
-            <h3>5. Заказы по месяцу и количеству</h3>
-            <form method="GET" class="filter-form">
+            <h3 id="q4">5. Заказы по месяцу и количеству</h3>
+            <form method="GET" action="#q4" class="filter-form">
                 <label>Месяц (1-12):</label>
                 <input type="number" name="month" min="1" max="12" value="{{ request.GET.month|default:3 }}" style="width: 50px;">
                 <label>Мин. количество:</label>

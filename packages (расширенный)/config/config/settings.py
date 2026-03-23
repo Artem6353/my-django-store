@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-qr6=pcii#!ub%9+p66s2w-y#$#@42bn_00$6-^$dgdic$e1#d!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+# Обязательно добавьте протокол https://
+CSRF_TRUSTED_ORIGINS = [
+    'https://unliked-marcela-weedier.ngrok-free.dev',
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

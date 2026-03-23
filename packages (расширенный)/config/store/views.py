@@ -16,19 +16,19 @@ def dashboard_view(request):
             form = CategoryForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('/#catalog')
 
         elif 'btn_product' in request.POST:
             form = ProductForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('/#catalog')
 
         elif 'btn_order' in request.POST:
             form = OrderForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('/#catalog')
 
     # --- 3. ВСЕ ТАБЛИЦЫ (Сырые данные для вывода списков) ---
     # Мы берем все категории и сразу "приклеиваем" к ним связанные товары
@@ -78,4 +78,4 @@ def delete_item(request, model_name, item_id):
         obj = get_object_or_404(Order, id=item_id)
 
     obj.delete()
-    return redirect('dashboard')
+    return redirect('/#delete')
