@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>Отчёты по запросам БД</h2>
+<a href="{% url 'add_order' %}"><- Назад к форме</a><hr>
+
+    <h3>1. Список продукции (Текстовый фильтр)</h3>
+<form method="GET" style="margin-bottom: 10px;" action="{% url 'reports_view' %}">
+    <input type="text" name="search_q1" placeholder="Введите название..." value="{{ request.GET.search_q1 }}">
+    <button type="submit">Найти</button>
+</form>
+
+<table border="1">
+    <tr>
+        <th>Название товара</th>
+        <th>Цена</th>
+    </tr>
+    {% for p in q1 %}
+    <tr>
+        <td>{{ p.title }}</td>
+        <td>{{ p.price }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">Совпадений не найдено</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>2. Заказы (Фильтр по дате)</h3>
+<form method="GET" style="margin-bottom: 10px;">
+    <input type="date" name="date_q2" value="{{ request.GET.date_q2 }}">
+    <button type="submit">Фильтровать</button>
+</form>
+
+<table border="1">
+    <tr>
+        <th>№ Заказа</th>
+        <th>Email</th>
+        <th>Дата</th>
+    </tr>
+    {% for o in q2 %}
+    <tr>
+        <td>{{ o.id }}</td> <td>{{ o.customer_email }}</td>
+        <td>{{ o.order_date }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">Заказов на эту дату нет</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>3. Поиск по Email</h3>
+<form method="GET" style="margin-bottom: 10px;">
+    <input type="email" name="email_q4" placeholder="example@mail.ru" value="{{ request.GET.email_q4 }}">
+    <button type="submit">Найти</button>
+</form>
+
+<table border="1">
+    <tr>
+        <th>№ Заказа</th>
+        <th>Email клиента</th>
+    </tr>
+    {% for o in q4 %}
+    <tr>
+        <td>{{ o.id }}</td>
+        <td>{{ o.customer_email }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">Заказов с таким Email не найдено</td>
+    </tr>
+    {% endfor %}
+</table>
+
+    <h3>4. Максимальная цена товара в каталоге</h3>
+    <div class="result-box">
+        Максимальная стоимость: {{ q3.max_price|default:"0" }} руб.
+    </div>
+
+
+    <h3>5. Заказы по месяцу и количеству</h3>
+<form method="GET" style="margin-bottom: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px;">
+    <label>Месяц (1-12):</label>
+    <input type="number" name="month" min="1" max="12" value="{{ request.GET.month|default:3 }}" style="width: 50px;">
+
+    <label>Мин. количество:</label>
+    <input type="number" name="min_qty" min="0" value="{{ request.GET.min_qty|default:2 }}" style="width: 60px;">
+
+    <button type="submit">Применить фильтр</button>
+</form>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Количество</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in q5 %}
+        <tr>
+            <td>{{ o.order_date }}</td>
+            <td>{{ o.quantity }}</td>
+            <td>{{ o.customer_email }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" class="empty">Заказов с такими параметрами не найдено</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    <h3>6. Расчет полной стоимости (Цена × Количество)</h3>
+    <table border="1">
+        <tr>
+            <th>Товар</th>
+            <th>Кол-во</th>
+            <th>Цена за ед.</th><th>ИТОГО</th>
+        </tr>
+        {% for o in q6 %}
+        <tr>
+            <td>{{ o.product.title }}</td>
+            <td>{{ o.quantity }}</td>
+            <td>{{ o.product.price }}</td>
+            <td><strong>{{ o.total }}</strong></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>7. Все товары (Сортировка по убыванию цены)</h3>
+    <table border="1">
+        <tr>
+            <th>Название</th>
+            <th>Цена</th>
+        </tr>
+        {% for p in q7 %}
+        <tr>
+            <td>{{ p.title }}</td>
+            <td>{{ p.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>8. Товары дороже 5000 руб. (Связь с Категориями)</h3>
+    <table border="1">
+        <tr>
+            <th>Название товара</th>
+            <th>Категория</th>
+            <th>Цена</th>
+        </tr>
+        {% for p in q8 %}
+        <tr>
+            <td>{{ p.title }}</td>
+            <td>{{ p.category.name }}</td>
+            <td>{{ p.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{% url 'add_order' %}" style="text-decoration: none; background: #3498db; color: white; padding: 10px 20px; border-radius: 5px;">← Назад к форме</a>
+</body>
+</html>
